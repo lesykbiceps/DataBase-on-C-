@@ -1,0 +1,293 @@
+#pragma once
+//#include"Application.h"
+#include <iostream>
+#include<cstdio>
+#include<string>
+#include<Windows.h>
+using namespace std;
+class Applications // назва класу
+{
+private:
+    static const int MAX_App = 300; // максимальна кількість фільмів
+    Application Objects[MAX_App]; // масив фільмів
+    int NumOfApp; // реальна кількість програм у базі
+public:
+    Applications(void);// конструктор за замовчуванням
+    void AddNewApp();// додавання нового елементу класу
+    void EditApp1();// редагування певного елементу
+    void DeleteApp();// видалення певного елементу
+    void ShowInfo();// виведення всієї інформації про елемент
+    void ShowDataBase();// виведення всіх елементів
+    void SortByName();// сортування за назвою
+    void ShowTheMostExpensive();// вивід найдорожчої програми
+};
+
+//#include"Applications.h"
+// Конструктор за замовчуванням
+Applications::Applications(void) :NumOfApp(0) {}
+// Методи:
+void Applications::AddNewApp(void)
+{
+    string category, n, brand;
+    int date, ver;
+    float pr;
+    cout << "Please enter a category for a new app:";
+    cin >> category;
+    cout << endl;
+    cout << "Please enter a name for a new app:";
+    cin >> n;
+    cout << endl;
+    cout << "Please enter a brand for a new app:";
+    cin >> brand;
+    cout << endl;
+    cout << "Please enter a year of release for a new app:";
+    cin >> date;
+    if (date < 0)
+    {
+        cout << "Something went wrong,please try again! " << endl;
+    }
+    cout << endl;
+    cout << "Please enter a version for a new app:";
+    cin >> ver;
+    if (ver < 0)
+    {
+        cout << "Something went wrong,please try again! " << endl;
+    }
+    cout << endl;
+    cout << "Please enter a price for a new app:";
+    cin >> pr;
+    if (pr < 0)
+    {
+        cout << "Something went wrong,please try again! " << endl;
+    }
+    else
+    {
+        Objects[NumOfApp].SetCategory(category);
+        Objects[NumOfApp].SetName(n);
+        Objects[NumOfApp].SetBrand(brand);
+        Objects[NumOfApp].SetYear(date);
+        Objects[NumOfApp].SetVersion(ver);
+        Objects[NumOfApp].SetPrice(pr);
+        NumOfApp++;
+        cout << endl;
+        cout << "Your input was correct!" << endl;
+    }
+}
+void Applications::EditApp1(void)
+{
+    int item, amount;
+    cout << "Enter the number of programs you want to edit:";
+    cin >> amount;
+    cout << endl;
+    cout << "What item would you like to edit? " << endl
+        << "1 - program category\n2 - name of app\n3 - brand of app" << endl
+        << "4 - year of release\n5 - version of app" << endl
+        << "6 - price of app" << endl
+        << "Your item is:";
+    cin >> item;
+    switch (item)
+    {
+    case 1:
+    {
+        string category;
+        cout << "Please enter a new category for an app:";
+        cin >> category;
+        cout << endl;
+        Objects[amount - 1].SetCategory(category);
+        cout << "Changes saved successfully! " << endl;
+    };
+    break;
+    case 2:
+    {
+        string name;
+        cout << "Please enter a new name for an app:";
+        cin >> name;
+        cout << endl;
+        Objects[amount - 1].SetName(name);
+        cout << "Changes saved successfully! " << endl;
+    };
+    break;
+    case 3:
+    {
+        string brand;
+        cout << "Please enter a new brand for an app:";
+        cin >> brand;
+        cout << endl;
+        Objects[amount - 1].SetBrand(brand);
+        cout << "Changes saved successfully! " << endl;
+    };
+    break;
+    case 4:
+    {
+        int year;
+        cout << "Please enter a year of release for an app:";
+        cin >> year;
+        cout << endl;
+        Objects[amount - 1].SetYear(year);
+        cout << "Changes saved successfully! " << endl;
+    };
+    break;
+    case 5:
+    {
+        int version;
+        cout << "Please enter a new version for an app:";
+        cin >> version;
+        cout << endl;
+        Objects[amount - 1].SetVersion(version);
+        cout << "Changes saved successfully! " << endl;
+    };
+    break;
+    case 6:
+    {
+        float price;
+        cout << "Please enter a new price for an app:";
+        cin >> price;
+        cout << endl;
+        Objects[amount - 1].SetPrice(price);
+        cout << "Changes saved successfully! " << endl;
+    };
+    break;
+    default:
+        cout << "Review the menu again, you have entered something wrong. You can try again!" << endl;
+    }
+}
+void Applications::DeleteApp(void)
+{
+    int element;
+    cout << "What number of element would you like to delete:";
+    cin >> element;
+    cout << "Deleting in process...." << endl;
+    for (int i = element - 1; i < NumOfApp; i++)
+    {
+        Objects[i] = Objects[i + 1];
+    }
+    NumOfApp--;
+}
+void Applications::ShowInfo(void)
+{
+    int number;
+    cout << "Enter a number of element you want to see:";
+    cin >> number;
+    cout << endl;
+    Objects[number - 1].GetAllInfo();
+    cout << endl;
+}
+void Applications::ShowDataBase(void)
+{
+    cout << " We are happy to show you information about all programs in our database! " << endl;
+    cout << endl;
+    for (int i = 0; i < NumOfApp; i++)
+    {
+        cout << i + 1 << ".";
+        Objects[i].GetAllInfo();
+        cout << endl;
+    }
+    cout << endl;
+}
+void Applications::SortByName()// бульбашкове сортування
+{
+    for (int i = 0; i < NumOfApp; i++)
+    {
+        for (int j = 0; j < NumOfApp - i - 1; j++)
+        {
+            if (Objects[j].GetName() > Objects[j + 1].GetName()) {
+                Application tmp = Objects[j];
+                Objects[j] = Objects[j + 1];
+                Objects[j + 1] = tmp;
+            }
+        }
+    }
+}
+void Applications::ShowTheMostExpensive()
+{
+    int MostExp = Objects[0].GetPrice();
+    int number;
+    for (int i = 0; i < NumOfApp; i++)
+    {
+        if (MostExp < Objects[i].GetPrice())
+        {
+            MostExp = Objects[i].GetPrice();
+            number = i;
+        }
+    }
+    cout << "The most expensive app is:" << Objects[number].GetName() << "Price:" << MostExp << "$" << endl;
+}
+//Файл Console main.cpp
+//#include "Applications.h"
+#include <iostream>
+#include<cstdio>
+#include<string>
+#include<string.h>
+#include<Windows.h>
+#include<cstring>
+// Підключаємо бібліотеки
+using namespace std;
+int main()
+{
+    setlocale(LC_ALL, "ru");
+    Applications First;
+    while (true)
+    {
+        cout << "\tProgram menu " << endl << endl;
+        cout << "| 0 - Exit |" << endl;
+        cout << "| 1 - Add new application |" << endl;
+        cout << "| 2 - Edit information about app |" << endl;
+        cout << "| 3 - Delete application |" << endl;
+        cout << "| 4 - Show some application |" << endl;
+        cout << "| 5 - Show all applications |" << endl;
+        cout << "| 6 - Sort applications by name |" << endl;
+        cout << "| 7 - Show the most expensive app |" << endl;
+        cout << "| 8 - Clear the console field |" << endl;
+        cout << "Please, select a menu item: ";
+        int item;
+        cin >> item;
+        cout << "\n";
+        switch (item)
+        {
+        case 0:
+            cout << "Exit the program.... " << endl;
+            break;
+        case 1:
+            First.AddNewApp();
+            break;
+        case 2:
+            First.EditApp1();
+            break;
+        case 3:
+            First.DeleteApp();
+            break;
+        case 4:
+            First.ShowInfo();
+            break;
+        case 5:
+            First.ShowDataBase();
+            break;
+        case 6:
+            First.SortByName();
+            break;
+        case 7:
+            First.ShowTheMostExpensive();
+            break;
+        case 8:
+            system("CLS");
+            break;
+        default:
+            cout << "Review the menu again, you have entered something wrong. You can try again!" << endl;
+            main();
+        }
+        string choice;
+        cout << "Would you like to make a full exit from program?[yes/no] " << endl;
+        cin >> choice;
+        if (choice == "yes")
+        {
+            cout << endl;
+            cout << "Have a nice day!" << endl;
+            break;
+        }
+        else
+        {
+        }
+    }
+    system("pause");
+    return 0;
+}
